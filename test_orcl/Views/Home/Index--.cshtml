@@ -1,0 +1,36 @@
+﻿@*@{
+        ViewBag.Title = "Home Page";
+        var TENUSER = (test_orcl.Models.DangNhap)System.Web.HttpContext.Current.Session["TENUSER"];
+
+    }
+
+    @model List<test_orcl.Models.DangNhap>
+
+    <h2>Username List</h2>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Password</th>
+        </tr>
+        @foreach (var tk in Model)
+        {
+            <tr>
+                <td>@tk.ID</td>
+                <td>@tk.TENUSER</td>
+                <td>@tk.PASSWORD</td>
+                <td>@tk.NGAYUD</td>
+            </tr>
+        }
+    </table>
+    @if (System.Web.HttpContext.Current.Session != null && System.Web.HttpContext.Current.Session["TENUSER"] != null)
+    {
+        <h2>Xin chào, @System.Web.HttpContext.Current.Session["TENUSER"]!</h2>
+    }
+    else
+    {
+        <p>Session không tồn tại hoặc đã hết hạn.</p>
+    }*@
+<h2>@TENUSER.TENBACSI</h2>
+

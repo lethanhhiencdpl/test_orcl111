@@ -1,0 +1,57 @@
+﻿@model List<test_orcl.Models.Analysis>
+@{
+    ViewBag.Title = "DetailPatient";
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+
+@Html.Action("_HienThiTTBenhNhanPartial", "Doctor")
+@Html.Action("_NgayXetNghiemPartial", "Doctor")
+<table class="table">
+    <thead>
+        <tr>
+            <th>Mã xét nghiệm</th>
+            <th>Tên xét nghiệm</th>
+            <th>Kết Quả</th>
+            <th>CSBT</th>
+            <th>Đơn vị</th>
+            <th>Ngày XN</th>
+
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var record in Model)
+        {
+            //var ranges = record.CSBT.Split('-');
+            //double result;
+            <tr>
+                <td>@record.MAXN</td>
+                <td>@record.TENXETNGHIEM</td>
+                <td>
+                    @if (record.GHICHU.Trim().ToString() == "H")
+                    {
+                        <span style="color: red; font-weight: 600">@record.KETQUA.ToString()</span>
+                    }
+                    else if (record.GHICHU.Trim().ToString() == "L")
+                    {
+                        <span style="color: blue; font-weight: 600">@record.KETQUA.ToString()</span>
+                    }
+                    else if (record.GHICHU.Trim().ToString() == "")
+                    {
+                        @record.KETQUA.ToString();
+                    }
+                    else 
+                    {
+                        @record.KETQUA.ToString();
+                    }
+                </td>
+
+                @*<td>@record.KETQUA.ToString()</td>*@
+                <td>@record.CSBT.ToString()</td>
+                <td>@record.DONVI</td>
+                <td>@record.NGAYXETNGHIEM</td>
+            </tr>
+
+        }
+    </tbody>
+</table>

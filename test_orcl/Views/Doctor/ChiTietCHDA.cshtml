@@ -1,0 +1,38 @@
+﻿@model List<test_orcl.Models.PatientDataImage>
+@{
+    ViewBag.Title = "DetailPatient";
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+@Html.Action("_HienThiTTBenhNhanPartial", "Doctor")
+@Html.Action("_NgayCDHAPartial", "Doctor")
+<table class="table">
+    <thead>
+        <tr>
+            <th>Mã xét nghiệm</th>
+            <th>Tên xét nghiệm</th>
+            <th>Kết Quả</th>
+            <th>CSBT</th>
+            <th>Đơn vị</th>
+
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var record in Model)
+        {
+            //var ranges = record.CSBT.Split('-');
+            //double result;
+            <tr>
+                <td>@record.ID</td>
+                <td>@record.DONGIA</td>
+                <td>@record.TENLOAIKT</td>
+                <td>@Html.Raw(record.MOTA)</td>
+                <td>@record.KETLUAN</td>
+                <td>@record.NGAYKETQUA</td>
+
+            </tr>
+
+        }
+    </tbody>
+</table>
+

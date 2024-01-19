@@ -1,0 +1,22 @@
+﻿@model IEnumerable<test_orcl.Models.CountNgayXetNghiem>
+@{
+    ViewBag.Title = "Chidinh";
+    //Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+    Layout = "";
+}
+@if (Model != null && Model.Any())
+{
+    <div class="ngay-xet-nghiem-list">
+        <h4>Danh sách ngày xét nghiệm:</h4>
+        <ul>
+            @foreach (var item in Model)
+            {
+                <li>@Html.ActionLink(item.NGAYXETNGHIEM.ToString("dd/MM/yyyy"), "ChiTietXetNghiem", "Doctor", new { Date = item.NGAYXETNGHIEM, DoctorCode = item.MABS, code = item.MABN }, null)</li>
+            }
+        </ul>
+    </div>
+}
+else
+{
+    <p>Không có thông tin ngày xét nghiệm.</p>
+}

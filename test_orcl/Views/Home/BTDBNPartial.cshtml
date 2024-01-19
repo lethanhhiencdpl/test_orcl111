@@ -1,0 +1,28 @@
+﻿@model IEnumerable<test_orcl.Models.BTDBenhNhan>
+<!-- Team -->
+<div class="team">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="section_title"><h2>Đội ngũ bác sĩ giàu kinh nghiệm</h2></div>
+            </div>
+        </div>
+        <div class="row team_row">
+            @foreach (var item in Model)
+            {
+                <!-- Team Member -->
+                <div class="col-lg-3 team_col">
+                    <div class="team_member">
+                        <div class="team_member_image d-flex flex-column align-items-center justify-content-end"><img src="~/Style_template/images/team_1.png" alt=""></div>
+                        <div class="team_member_info">
+                            <div class="team_member_name"><a href="#">@item.HOTEN</a></div>
+                            <div class="team_member_title">@item.DIDONG</div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+

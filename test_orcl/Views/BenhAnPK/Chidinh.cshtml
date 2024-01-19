@@ -1,0 +1,69 @@
+﻿@model List<test_orcl.Models.DanhChiDinhBSTrongNgay>
+@{
+    ViewBag.Title = "Chidinh";
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<h2>Lịch sử khám bệnh của bệnh nhân</h2>
+
+<form id="searchForm" action="/BenhAnPK/Chidinh" method="post" class="form-inline">
+        <div class="form-group">
+            <label for="startDate">Ngày bắt đầu:</label>
+            <input type="date" class="form-control" id="startDate" name="startDate">
+        </div>
+
+        <div class="form-group mx-sm-3">
+            <label for="endDate" class="mr-2">Ngày kết thúc:</label>
+            <input type="date" class="form-control" id="endDate" name="endDate">
+        </div>
+
+        <button type="button" class="btn btn-primary" onclick="validateForm()">Tìm kiếm</button>
+    </form>
+
+    <script>
+        function validateForm() {
+            var startDate = document.getElementById("startDate").value;
+            var endDate = document.getElementById("endDate").value;
+
+            if (startDate === "" || endDate === "") {
+                alert("Vui lòng nhập cả ngày bắt đầu và ngày kết thúc!");
+            } else {
+                document.getElementById("searchForm").submit();
+            }
+        }
+    </script>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Mã bệnh nhân</th>
+            <th>Họ tên</th>
+            <th>Năm sinh</th>
+            <th>Mã BS</th>
+            <th>Ngày</th>
+            <th>Kết Quả Xét Nghiệm</th>
+            <th>Kết Quả CĐHA</th>
+            <!-- Thêm các cột khác nếu cần -->
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var record in Model)
+        {
+            <tr>
+                <td>@record.MABN</td>
+                <td>@record.HOTEN</td>
+                <td>@record.NAMSINH</td>
+                <td>@record.MABS.ToString()</td>
+                <td>@record.NGAY</td>
+                @*<td>@Html.ActionLink("Xem chi tiết", "Details", "BenhAnPK", new { code = record.MABN }, null)</td>*@
+                @*<td>@Html.ActionLink("Xem", "ChiTietXetNghiem", "Doctor", new { code = record.MABN, Date = record.NGAY, doctorCode = record.MABS }, null)</td>*@
+                <td>@Html.ActionLink("Xem", "ChiTietXetNghiem", "Doctor", new { code = record.MABN, Date = record.NGAY, doctorCode = record.MABS }, new { target = "_blank" })</td>
+                <td>@Html.ActionLink("Xem", "ChiTietCHDA", "Doctor", new { code = record.MABN, Date = record.NGAY, doctorCode = record.MABS }, new { target = "_blank" })</td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+

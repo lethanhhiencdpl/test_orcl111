@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+
+@model List<test_orcl.Models.BenhAnPK>
+
+@{
+    ViewBag.Title = "Lịch sử khám bệnh";
+}
+
+<h2>Lịch sử khám bệnh của bệnh nhân</h2>
+    <form id="searchForm" action="/BenhAnPK/Chidinh" method="post" class="form-inline">
+        <div class="form-group">
+            <label for="startDate">Ngày bắt đầu:</label>
+            <input type="date" class="form-control" id="startDate" name="startDate">
+        </div>
+
+        <div class="form-group mx-sm-3">
+            <label for="endDate" class="mr-2">Ngày kết thúc:</label>
+            <input type="date" class="form-control" id="endDate" name="endDate">
+        </div>
+
+        <button type="button" class="btn btn-primary" onclick="validateForm()">Tìm kiếm</button>
+    </form>
+
+    <script>
+        function validateForm() {
+            var startDate = document.getElementById("startDate").value;
+            var endDate = document.getElementById("endDate").value;
+
+            if (startDate === "" || endDate === "") {
+                alert("Vui lòng nhập cả ngày bắt đầu và ngày kết thúc!");
+            } else {
+                document.getElementById("searchForm").submit();
+            }
+        }
+    </script>
+
+@*<form action="/BenhAnPK/Chidinh" method="post" class="form-inline" onsubmit="return validateForm()">
+    <div class="form-group">
+        <label for="startDate">Ngày bắt đầu:</label>
+        <input type="date" class="form-control" id="startDate" name="startDate">
+    </div>
+
+    <div class="form-group mx-sm-3">
+        <label for="endDate" class="mr-2">Ngày kết thúc:</label>
+        <input type="date" class="form-control" id="endDate" name="endDate">
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="search()">Tìm kiếm</button>
+</form>
+
+<script>
+    var savedStartDate = "";
+    var savedEndDate = "";
+
+    function search() {
+        savedStartDate = document.getElementById("startDate").value;
+        savedEndDate = document.getElementById("endDate").value;
+        document.getElementById("searchForm").submit();
+    }
+
+    function validateForm() {
+        if (savedStartDate === "" || savedEndDate === "") {
+            alert("Vui lòng nhập cả ngày bắt đầu và ngày kết thúc!");
+            return false; // Ngăn chặn việc gửi form nếu không hợp lệ
+        }
+
+        // Nếu hợp lệ, gửi form
+        return true;
+    }
+
+    // Khôi phục giá trị ngày đã chọn sau khi tải lại trang
+    document.getElementById("startDate").value = savedStartDate;
+    document.getElementById("endDate").value = savedEndDate;
+</script>*@
+
+
+

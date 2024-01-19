@@ -1,0 +1,23 @@
+﻿@model IEnumerable<test_orcl.Models.CountNgayCDHA>
+@{
+    ViewBag.Title = "Chidinh";
+    //Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+    Layout = "";
+}
+@if (Model != null && Model.Any())
+{
+    <div class="ngay-xet-nghiem-list">
+        <h4>Danh sách ngày thực hiện chẩn đoán hình ảnh:</h4>
+        <ul>
+            @foreach (var item in Model)
+            {
+                <li>@Html.ActionLink(item.NGAYCDHA.ToString("dd/MM/yyyy"), "ChiTietCDHA", "Doctor", new { Date = item.NGAYCDHA, code = item.MABN }, null)</li> //DoctorCode = item.MABS
+            }
+        </ul>
+    </div>
+}
+else
+{
+<p>Không có thông tin ngày thực hiện chẩn đoán hình ảnh.</p>
+}
+

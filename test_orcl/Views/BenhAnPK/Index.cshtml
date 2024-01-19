@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+
+@model List<test_orcl.Models.BenhAnPK>
+
+@{
+    ViewBag.Title = "Lịch sử khám bệnh";
+}
+
+<h2>Lịch sử khám bệnh của bệnh nhân</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ngày khám</th>
+            <th>Chuẩn đoán</th>
+            <th>Điều trị</th>
+            <th>Bác sĩ</th>
+            <th>Chi Tiết</th>
+            <!-- Thêm các cột khác nếu cần -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var record in Model)
+        {
+            <tr>
+                <td>@record.MABN</td>
+                <td>@record.CHANDOAN</td>
+                <td>@record.MAKP</td>
+                <td>@record.MABS</td>
+                <td>@Html.ActionLink("Xem chi tiết", "Index", "BenhAnPK", new { code = record.MABN }, null)</td>
+                <!-- Hiển thị các thông tin khác của lịch sử khám bệnh -->
+            </tr>
+        }
+    </tbody>
+</table>

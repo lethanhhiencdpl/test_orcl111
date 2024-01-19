@@ -1,0 +1,34 @@
+﻿@model IEnumerable<test_orcl.Models.GoiKham>	
+    
+    <!-- Departments -->
+<div class="departments">
+    @*<div class="departments_background parallax-window" data-parallax="scroll" data-image-src="~/../../images/departments.jpg" data-speed="0.8"></div>*@
+    <div class="departments_background parallax-window" data-parallax="scroll" data-image-src="../../Style_template/images/departments.jpg" data-speed="0.8"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="section_title section_title_light"><h2>Our Medical Departments</h2></div>
+            </div>
+        </div>
+        <div class="row departments_row row-md-eq-height">
+
+            @foreach (var item in Model)
+            {
+                <!-- Department -->
+                <div class="col-lg-3 col-md-6 dept_col">
+                    <div class="dept">
+                        <div class="dept_image"><img src="~/Style_template/images/dept_1.jpg" alt=""></div>
+                        <div class="dept_content text-center">
+                            <div class="dept_title">
+                                <a href="#">@item.TENGOIKHAM</a>
+                            </div>
+                            <div class="dept_subtitle">@item.MOTA</div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+

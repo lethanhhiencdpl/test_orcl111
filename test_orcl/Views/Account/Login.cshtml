@@ -1,0 +1,25 @@
+﻿@model test_orcl.Models.DangNhap
+@{
+    Layout = null;
+    ViewBag.Title = "Login";
+}
+
+@using (Html.BeginForm("Login", "Account", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.TENUSER)
+        @Html.TextBoxFor(model => model.TENUSER, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.PASSWORD)
+        @Html.PasswordFor(model => model.PASSWORD, new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Đăng Nhập</button>
+    <p>
+        @ViewBag.thongbao
+    </p>
+}

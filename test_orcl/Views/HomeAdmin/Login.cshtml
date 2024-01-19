@@ -1,0 +1,76 @@
+﻿@model test_orcl.Models.UserDocTor
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Đăng Nhập</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="../../Style_Admin/css/bootstrap.min.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="../../Style_Admin/css/metisMenu.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/startmin.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="../../Style_Admin/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Đăng Nhập</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form method="post" role="form">
+                            <fieldset>
+                                @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <div class="form-group">
+                                        @*<input class="form-control" placeholder="Username" name="Username" type="text" autofocus>*@
+                                        <label>Tên Đăng Nhập</label>
+                                        @Html.TextBoxFor(model => model.ID, new { @class = "form-control" })
+                                    </div>
+                                    <div class="form-group">
+                                        @*<input class="form-control" placeholder="Password" name="Password" type="password" value="">*@
+                                        <label>Mật Khẩu</label>
+                                        @Html.PasswordFor(model => model.DIENTHOAI, new { @class = "form-control" })
+                                    </div>
+                                    <button type="submit" class="btn btn-primary active" role="button">Đăng Nhập</button>
+                                    <p>
+                                        @ViewBag.thongbao
+                                    </p>
+                                }
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- jQuery -->
+    <script src="../../Style_Admin/js/jquery.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../../Style_Admin/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../../Style_Admin/js/metisMenu.min.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="../../Style_Admin/js/startmin.js"></script>
+</body>
+</html>
