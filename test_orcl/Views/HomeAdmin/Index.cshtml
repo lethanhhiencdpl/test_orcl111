@@ -10,19 +10,23 @@
     ViewBag.Title = "Lịch sử khám bệnh";
 }
 
-<h2>Lịch sử khám bệnh của bệnh nhân</h2>
-    <form id="searchForm" action="/BenhAnPK/Chidinh" method="post" class="form-inline">
-        <div class="form-group">
-            <label for="startDate">Ngày bắt đầu:</label>
-            <input type="date" class="form-control" id="startDate" name="startDate">
+<div class="container mt-4">
+    <h2 class="text-center mb-3">Tra cứu kết quả</h2>
+
+    <form id="searchForm" action="/BenhAnPK/Chidinh" method="post" class="row justify-content-center g-3">
+        <div class="col-12 col-md-4">
+            <label for="startDate" class="form-label">Ngày bắt đầu:</label>
+            <input type="date" class="form-control date-input" id="startDate" name="startDate">
         </div>
 
-        <div class="form-group mx-sm-3">
-            <label for="endDate" class="mr-2">Ngày kết thúc:</label>
-            <input type="date" class="form-control" id="endDate" name="endDate">
+        <div class="col-12 col-md-4">
+            <label for="endDate" class="form-label">Ngày kết thúc:</label>
+            <input type="date" class="form-control date-input" id="endDate" name="endDate">
         </div>
 
-        <button type="button" class="btn btn-primary" onclick="validateForm()">Tìm kiếm</button>
+        <div class="col-12 text-center mt-3">
+            <button type="button" class="btn btn-primary btn-sm" onclick="validateForm()">Tìm kiếm</button>
+        </div>
     </form>
 
     <script>
@@ -37,45 +41,25 @@
             }
         }
     </script>
+</div>
 
-@*<form action="/BenhAnPK/Chidinh" method="post" class="form-inline" onsubmit="return validateForm()">
-    <div class="form-group">
-        <label for="startDate">Ngày bắt đầu:</label>
-        <input type="date" class="form-control" id="startDate" name="startDate">
-    </div>
 
-    <div class="form-group mx-sm-3">
-        <label for="endDate" class="mr-2">Ngày kết thúc:</label>
-        <input type="date" class="form-control" id="endDate" name="endDate">
-    </div>
 
-    <button type="button" class="btn btn-primary" onclick="search()">Tìm kiếm</button>
-</form>
 
-<script>
-    var savedStartDate = "";
-    var savedEndDate = "";
 
-    function search() {
-        savedStartDate = document.getElementById("startDate").value;
-        savedEndDate = document.getElementById("endDate").value;
-        document.getElementById("searchForm").submit();
+
+
+<style>
+    .date-input {
+        max-width: 200px; /* Giới hạn chiều rộng của trường ngày */
+        margin: 0 auto; /* Căn giữa trong khung */
     }
 
-    function validateForm() {
-        if (savedStartDate === "" || savedEndDate === "") {
-            alert("Vui lòng nhập cả ngày bắt đầu và ngày kết thúc!");
-            return false; // Ngăn chặn việc gửi form nếu không hợp lệ
-        }
-
-        // Nếu hợp lệ, gửi form
-        return true;
+    .btn {
+        margin-top: 10px; /* Thêm khoảng cách giữa nút và các trường ngày */
     }
 
-    // Khôi phục giá trị ngày đã chọn sau khi tải lại trang
-    document.getElementById("startDate").value = savedStartDate;
-    document.getElementById("endDate").value = savedEndDate;
-</script>*@
-
-
-
+    .form-label {
+        font-weight: bold; /* Làm nổi bật nhãn */
+    }
+</style>

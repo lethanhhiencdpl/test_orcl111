@@ -5,7 +5,7 @@ using System.Web;
 
 namespace test_orcl.Models
 {
-    public class PatientDataImage
+    public class PatientDataImage:BTDBenhNhan
     {
         public string ID { get; set; }
         public string MABN { get; set; }
@@ -15,7 +15,9 @@ namespace test_orcl.Models
 
         public string KETLUAN { get; set; }
 
-        public string HOTENBS { get; set; }
+        public string BSCHIDINH { get; set; }
+
+        public string BSTHUCHIEN { get; set; }
 
         public string TENKYTHUAT { get; set; }
 
@@ -23,10 +25,13 @@ namespace test_orcl.Models
 
         public string NGAYCHUP { get; set; }
 
-        public string NGAYKETQUA { get; set; }
+        public DateTime NGAYKETQUA { get; set; }
 
         public double DONGIA { get; set; }
 
-        public List<PatientImage> Image { get; set; }
+        public string CHANDOAN { get; set; }
+
+        //public List<PatientImage> Image { get; set; }
+        public List<string> ImageBase64List { get; set; } // Danh sách hình ảnh dạng base64
     }
 }

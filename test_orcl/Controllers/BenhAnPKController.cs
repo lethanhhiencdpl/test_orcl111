@@ -32,8 +32,13 @@ namespace test_orcl.Controllers
         //[HttpGet]
         public ActionResult Chidinh(string mabs, DateTime startDate, DateTime endDate)
         {
-            List<DanhChiDinhBSTrongNgay> medicalRecords = _repository.GetDanhChiDinhBSTrongNgay(mabs, startDate , endDate);           
 
+            List<DanhChiDinhBSTrongNgay> medicalRecords = _repository.GetDanhChiDinhBSTrongNgay(mabs, startDate , endDate);
+            // Lấy thông báo lỗi từ HttpContext (nếu có)
+            if (HttpContext.Items["DatabaseError"] != null)
+            {
+                ViewBag.ErrorMessage = HttpContext.Items["DatabaseError"].ToString();
+            }
             return View(medicalRecords);
         }
 

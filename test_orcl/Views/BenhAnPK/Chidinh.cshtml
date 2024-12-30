@@ -2,22 +2,31 @@
 @{
     ViewBag.Title = "Chidinh";
     Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+
 }
 
-<h2>Lịch sử khám bệnh của bệnh nhân</h2>
+<div class="container mt-4">
+    <h2 class="text-center mb-2">Tra cứu kết quả bệnh nhân</h2>
 
-<form id="searchForm" action="/BenhAnPK/Chidinh" method="post" class="form-inline">
-        <div class="form-group">
-            <label for="startDate">Ngày bắt đầu:</label>
+    <form id="searchForm" action="/BenhAnPK/Chidinh" method="post" class="row justify-content-center g-3">
+        <div class="col-12 col-md-5">
+            <label for="startDate" class="form-label">Ngày bắt đầu:</label>
             <input type="date" class="form-control" id="startDate" name="startDate">
         </div>
 
-        <div class="form-group mx-sm-3">
-            <label for="endDate" class="mr-2">Ngày kết thúc:</label>
+        <div class="col-12 col-md-5">
+            <label for="endDate" class="form-label">Ngày kết thúc:</label>
             <input type="date" class="form-control" id="endDate" name="endDate">
         </div>
 
-        <button type="button" class="btn btn-primary" onclick="validateForm()">Tìm kiếm</button>
+        <div class="col-12 col-md-5">
+            <label for="searchName" class="form-label">Họ tên:</label>
+            <input type="text" class="form-control" id="searchName" placeholder="Nhập họ tên">
+        </div>
+
+        <div class="col-12 text-center">
+            <button type="button" class="btn btn-primary btn-sm" onclick="validateForm()">Tìm kiếm</button>
+        </div>
     </form>
 
     <script>
@@ -31,39 +40,85 @@
                 document.getElementById("searchForm").submit();
             }
         }
+        // Lọc danh sách theo họ tên
+        document.getElementById("searchName").addEventListener("keyup", function () {
+            var filter = this.value.toLowerCase();
+            var rows = document.querySelectorAll("#patientTable tbody tr");
+
+            rows.forEach(function (row) {
+                var name = row.cells[1].textContent.toLowerCase(); // Cột Họ tên
+                if (name.includes(filter)) {
+                    row.style.display = ""; // Hiển thị nếu khớp
+                } else {
+                    row.style.display = "none"; // Ẩn nếu không khớp
+                }
+            });
+        });
     </script>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Mã bệnh nhân</th>
-            <th>Họ tên</th>
-            <th>Năm sinh</th>
-            <th>Mã BS</th>
-            <th>Ngày</th>
-            <th>Kết Quả Xét Nghiệm</th>
-            <th>Kết Quả CĐHA</th>
-            <!-- Thêm các cột khác nếu cần -->
-        </tr>
-    </thead>
-    <tbody>
+    <div class="table-responsive mt-4">
+        <table id="patientTable" class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Mã BN</th>
+                    <th>Họ tên</th>
+                    <th>Năm sinh</th>
+                    <th>Mã BS</th>
+                    <th>Ngày</th>
+                    <th>KQ Xét Nghiệm</th>
+                    <th>KQ CĐHA</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var record in Model)
+                    {
+                        <tr>
+                            <td>@record.MABN</td>
+                            <td>@record.HOTEN</td>
+                            <td>@record.NAMSINH</td>
+                            <td>@record.MABS.ToString()</td>
+                            <td>@record.NGAY.ToString("dd/MM/yyyy")</td>
+                            <td>@Html.ActionLink("Xem", "ChiTietXetNghiem", "Doctor", new { code = record.MABN, Date = record.NGAY, doctorCode = record.MABS }, new { target = "_blank" })</td>
+                            <td>@Html.ActionLink("Xem", "ChiTietCHDA", "Doctor", new { code = record.MABN, Date = record.NGAY, doctorCode = record.MABS }, new { target = "_blank" })</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center">Không có dữ liệu hiển thị</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <div class="alert alert-danger">
+            @ViewBag.ErrorMessage
+        </div>
+    }
 
-        @foreach (var record in Model)
-        {
-            <tr>
-                <td>@record.MABN</td>
-                <td>@record.HOTEN</td>
-                <td>@record.NAMSINH</td>
-                <td>@record.MABS.ToString()</td>
-                <td>@record.NGAY</td>
-                @*<td>@Html.ActionLink("Xem chi tiết", "Details", "BenhAnPK", new { code = record.MABN }, null)</td>*@
-                @*<td>@Html.ActionLink("Xem", "ChiTietXetNghiem", "Doctor", new { code = record.MABN, Date = record.NGAY, doctorCode = record.MABS }, null)</td>*@
-                <td>@Html.ActionLink("Xem", "ChiTietXetNghiem", "Doctor", new { code = record.MABN, Date = record.NGAY, doctorCode = record.MABS }, new { target = "_blank" })</td>
-                <td>@Html.ActionLink("Xem", "ChiTietCHDA", "Doctor", new { code = record.MABN, Date = record.NGAY, doctorCode = record.MABS }, new { target = "_blank" })</td>
-            </tr>
-        }
-
-    </tbody>
-</table>
+</div>
 
 
+
+
+
+<style>
+    .date-input {
+        max-width: 200px; /* Giới hạn chiều rộng của trường ngày */
+        margin: 0 auto; /* Căn giữa trong khung */
+    }
+
+    .btn {
+        margin-top: 10px; /* Thêm khoảng cách giữa nút và các trường ngày */
+        margin-bottom: 10px;
+    }
+
+    .form-label {
+        font-weight: bold; /* Làm nổi bật nhãn */
+    }
+</style>

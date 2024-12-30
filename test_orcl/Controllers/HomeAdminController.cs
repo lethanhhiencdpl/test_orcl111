@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Web.Services.Description;
 using System.Xml.Linq;
 using test_orcl.Models;
 using test_orcl.Models.DataAccess;
@@ -20,18 +21,15 @@ namespace test_orcl.Controllers
 
         // GET: MedicalRecord
         private ListBenhAnPhongKham _repository = new ListBenhAnPhongKham();
-        public ActionResult Index(string mabs)
+        public ActionResult Index()
         {
             if (Session["ID"] == null)
             {
                 return RedirectToAction("Login", "HomeAdmin");
             }
-            //List<BenhAnPK> medicalRecords = _repository.GetBenhAn(mabs/*, startDate*/);
-            //List<DanhChiDinhBSTrongNgay> medicalRecords = _repository.GetDanhChiDinhBSTrongNgay(mabs, startDate, endDate);
-            //return View(medicalRecords);
+         
             return View();
 
-            //return View();
         }
 
         [HttpGet]
@@ -83,6 +81,7 @@ namespace test_orcl.Controllers
                 ModelState.AddModelError("", "Tên đăng nhập hoặc mật khẩu không đúng.");
                 return View(user);
             }
+
         }
 
         public ActionResult Logout()

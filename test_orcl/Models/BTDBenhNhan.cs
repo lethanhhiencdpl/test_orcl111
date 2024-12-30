@@ -19,6 +19,10 @@ namespace test_orcl.Models
 
         public int HIDE { get; set; }
 
+        public string PHAI { get; set; }
+
+        public string DIACHI { get; set; }
+
         public DateTime NGAYUD { get; set; }
     }
 }

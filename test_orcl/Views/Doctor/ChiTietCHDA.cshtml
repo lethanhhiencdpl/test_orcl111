@@ -4,35 +4,383 @@
     Layout = "~/Views/Shared/_Layout_Admin.cshtml";
 }
 @Html.Action("_HienThiTTBenhNhanPartial", "Doctor")
-@Html.Action("_NgayCDHAPartial", "Doctor")
-<table class="table">
-    <thead>
-        <tr>
-            <th>Mã xét nghiệm</th>
-            <th>Tên xét nghiệm</th>
-            <th>Kết Quả</th>
-            <th>CSBT</th>
-            <th>Đơn vị</th>
+@*@Html.Action("_NgayCDHAPartial", "Doctor")*@
 
-        </tr>
-    </thead>
 
-    <tbody>
-        @foreach (var record in Model)
+@*
+    <div>
+        <!-- Modal để hiển thị hình ảnh lớn -->
+        <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center;">
+            <span id="closeModal" style="position: absolute; top: 30px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
+            <img id="modalImage" src="" alt="Zoomed Image" style="max-width: 90%; max-height: 90%; border: 5px solid white; border-radius: 10px;" />
+        </div>
+
+        @foreach (var ngay in Model.Select(m => m.NGAYKETQUA.Date).Distinct().OrderBy(n => n))
         {
-            //var ranges = record.CSBT.Split('-');
-            //double result;
-            <tr>
-                <td>@record.ID</td>
-                <td>@record.DONGIA</td>
-                <td>@record.TENLOAIKT</td>
-                <td>@Html.Raw(record.MOTA)</td>
-                <td>@record.KETLUAN</td>
-                <td>@record.NGAYKETQUA</td>
+            <details style="margin-bottom: 20px;">
+                <summary style="font-size: 16px; font-weight: bold; color: brown; cursor: pointer;">
+                    Ngày: @ngay.ToString("dd/MM/yyyy")
+                </summary>
+                @foreach (var loai in Model.Where(m => m.NGAYKETQUA.Date == ngay)
+                                                       .Select(m => m.TENLOAIKT)
+                                                        .Distinct())
+                            {
+                    <details style="margin: 10px 0; border-left: 2px solid #ffa500; padding-left: 10px;">
+                        <summary style="font-weight: bold; color: orange; cursor: pointer;">
+                            @loai
+                        </summary>
+                        @foreach (var sieuAm in Model.Where(m => m.TENLOAIKT == loai && m.NGAYKETQUA.Date == ngay))
+                                    {
+                            <div style="margin-top: 20px; border-bottom: 1px solid #ddd; padding-bottom: 20px; display: flex; gap: 20px;">
+                                <!-- Phần mô tả -->
+                                <div style="flex: 1;">
+                                    <strong style="color: red;">@sieuAm.TENKYTHUAT</strong>
+                                    <div style="margin-top: 10px;">
+                                        <strong>Mô tả:</strong>
+                                        <div style="white-space: pre-line; margin-left: 10px; color: #444;">
+                                            @Html.Raw(sieuAm.MOTA)
+                                        </div>
+                                    </div>
+                                    <p><strong>Kết luận:</strong> @sieuAm.KETLUAN</p>
+                                    <p><strong>BS Siêu Âm:</strong> @sieuAm.HOTENBS</p>
+                                    @if (Model != null && Model.Any())
+                                    {
+                                        var firstRecord = Model.FirstOrDefault();
+                                        <button id="btnExportPdf"
+                                                class="btn btn-primary"
+                                                 onclick="window.location.href='@Url.Action("ExportPDF_SieuAm", "Doctor", new {
+                                                 Date = firstRecord.NGAYKETQUA.ToString("yyyy-MM-dd"),
+                                                 code = firstRecord?.MABN,
+                                                 doctorCode = firstRecord?.MABS
+                                                    })'">
+                                            In Kết Quả
+                                        </button>
+                }
+                                </div>
 
-            </tr>
 
+                                <!-- Phần hình ảnh -->
+                                <div style="flex: 1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                    @if (sieuAm.ImageBase64List.Any())
+                                    {
+                                        foreach (var image in sieuAm.ImageBase64List)
+                                        {
+                                            <img src="@image" alt="Image" style="cursor: pointer; max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 5px;" class="zoomable-image" />
+                                        }
+                                    }
+                                    else
+                {
+                                        <p><em>Không có hình ảnh</em></p>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </details>
+                }
+            </details>
         }
-    </tbody>
-</table>
+    </div>
 
+    <script>
+        // JavaScript để xử lý modal
+        document.addEventListener("DOMContentLoaded", function () {
+            const modal = document.getElementById("imageModal");
+            const modalImage = document.getElementById("modalImage");
+            const closeModal = document.getElementById("closeModal");
+
+            // Khi click vào hình ảnh nhỏ
+            document.querySelectorAll(".zoomable-image").forEach(img => {
+                img.addEventListener("click", function () {
+                    modal.style.display = "flex";
+                    modalImage.src = this.src;
+                });
+            });
+
+            // Khi click vào nút đóng
+            closeModal.addEventListener("click", function () {
+                modal.style.display = "none";
+            });
+
+            // Khi click ra ngoài modal
+            modal.addEventListener("click", function (e) {
+                if (e.target === modal) {
+                    modal.style.display = "none";
+                }
+            });
+        });
+    </script>
+
+*@
+
+
+
+@*
+    <div>
+        <!-- Modal để hiển thị hình ảnh lớn -->
+        <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center;">
+            <span id="closeModal" style="position: absolute; top: 30px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
+            <img id="modalImage" src="" alt="Zoomed Image" style="max-width: 90%; max-height: 90%; border: 5px solid white; border-radius: 10px;" />
+        </div>
+
+        @foreach (var ngay in Model.Select(m => m.NGAYKETQUA.Date).Distinct().OrderByDescending(n => n))
+        {
+            <details style="margin-bottom: 20px;">
+                <summary style="font-size: 16px; font-weight: bold; color: brown; cursor: pointer;">
+                    Ngày: @ngay.ToString("dd/MM/yyyy")
+                </summary>
+                <!-- Lọc các loại kỹ thuật trong ngày -->
+                @foreach (var loai in Model.Where(m => m.NGAYKETQUA.Date == ngay)
+                                           .Select(m => m.TENLOAIKT)
+                                           .Distinct())
+                {
+                    <details style="margin: 10px 0; border-left: 2px solid #ffa500; padding-left: 10px;">
+                        <summary style="font-weight: bold; color: orange; cursor: pointer;">
+                            @loai
+                        </summary>
+                        <!-- Lọc chi tiết từng kỹ thuật -->
+                        @foreach (var kyThuat in Model.Where(m => m.TENLOAIKT == loai && m.NGAYKETQUA.Date == ngay))
+                        {
+                            <div style="margin-top: 20px; border-bottom: 1px solid #ddd; padding-bottom: 20px; display: flex; gap: 20px;">
+                                <!-- Phần mô tả -->
+                                <div style="flex: 1;">
+                                    <strong style="color: red;">@kyThuat.TENKYTHUAT</strong>
+                                    <p><strong>BS Chỉ định:</strong> @kyThuat.BSCHIDINH</p>
+                                    <div style="margin-top: 10px;">
+                                        <strong>Mô tả:</strong>
+                                        <div style="white-space: pre-line; margin-left: 10px; color: #444;">
+                                            @Html.Raw(kyThuat.MOTA)
+                                        </div>
+                                    </div>
+                                    <p><strong>Kết luận: @kyThuat.KETLUAN</strong></p>
+                                    <p><strong>BS Siêu Âm:</strong> @kyThuat.BSTHUCHIEN</p>
+                                    <!-- Nút bấm để in kết quả -->
+                                    <button class="btnExportPdf btn btn-primary"
+                                            data-url="@Url.Action("ExportPDF_CDHA", "Doctor", new
+                                     {
+                                         Date = Model.Where (m=>m.NGAYKETQUA==ngay),
+                                         code = firstKyThuat.MABN,
+                                         doctorCode = firstKyThuat.MABS
+                                     })">
+                                        In Kết Quả
+                                    </button>
+                                </div>
+                                <!-- Phần hình ảnh -->
+                                <div style="flex: 1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                    @if (kyThuat.ImageBase64List != null && kyThuat.ImageBase64List.Any(image => !string.IsNullOrEmpty(image)))
+                                    {
+                                        foreach (var image in kyThuat.ImageBase64List)
+                                        {
+                                            <img src="@image" alt="Image" style="cursor: pointer; max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 5px;" class="zoomable-image" />
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p><em>Không có hình ảnh</em></p>
+                                    }
+                                </div>
+
+                                <!-- Thông tin động để tạo URL PDF -->
+                                <input type="hidden" id="code" value="@kyThuat.MABN" />
+                                <input type="hidden" id="doctorCode" value="@kyThuat.MABS" />
+                                <input type="hidden" id="date" value="@kyThuat.NGAYKETQUA" />
+
+                            </div>
+                        }
+                    </details>
+                }
+            </details>
+        }
+    </div>
+
+
+
+    <!--Xử lý view to hình ảnh-->
+    <script>
+        // JavaScript để xử lý modal
+        document.addEventListener("DOMContentLoaded", function () {
+            const modal = document.getElementById("imageModal");
+            const modalImage = document.getElementById("modalImage");
+            const closeModal = document.getElementById("closeModal");
+
+            // Khi click vào hình ảnh nhỏ
+            document.querySelectorAll(".zoomable-image").forEach(img => {
+                img.addEventListener("click", function () {
+                    modal.style.display = "flex";
+                    modalImage.src = this.src;
+                });
+            });
+
+            // Khi click vào nút đóng
+            closeModal.addEventListener("click", function () {
+                modal.style.display = "none";
+            });
+
+            // Khi click ra ngoài modal
+            modal.addEventListener("click", function (e) {
+                if (e.target === modal) {
+                    modal.style.display = "none";
+                }
+            });
+        });
+    </script>
+    <!--/ Xử lý view to hình ảnh-->
+
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <iframe id="pdfViewer" style="width: 100%; height: 1300px; border: 1px solid #ddd;"></iframe>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const buttons = document.querySelectorAll(".btnExportPdf");
+            buttons.forEach(button => {
+                button.addEventListener("click", function () {
+                    const pdfUrl = this.getAttribute("data-url");
+                    if (pdfUrl) {
+                        const iframe = document.getElementById("pdfViewer");
+                        if (iframe) {
+                            iframe.src = pdfUrl //+ "#toolbar=0";
+                        } else {
+                            console.error("Iframe không tồn tại.");
+                        }
+                    } else {
+                        console.error("URL PDF không hợp lệ.");
+                    }
+                });
+            });
+        });
+    </script>
+
+
+*@
+
+
+
+
+
+
+<div>
+    <!-- Modal để hiển thị hình ảnh lớn -->
+    <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center;">
+        <span id="closeModal" style="position: absolute; top: 30px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
+        <img id="modalImage" src="" alt="Zoomed Image" style="max-width: 90%; max-height: 90%; border: 5px solid white; border-radius: 10px;" />
+    </div>
+
+    <!-- Hiển thị ngày và loại kỹ thuật -->
+    @foreach (var ngay in Model.Select(m => m.NGAYKETQUA.Date).Distinct().OrderByDescending(n => n))
+    {
+        <details style="margin-bottom: 20px;">
+            <summary style="font-size: 16px; font-weight: bold; color: brown; cursor: pointer;">
+                Ngày: @ngay.ToString("dd/MM/yyyy")
+            </summary>
+            <!-- Hiển thị từng loại kỹ thuật -->
+            @foreach (var loai in Model.Where(m => m.NGAYKETQUA.Date == ngay)
+                                       .Select(m => m.TENLOAIKT)
+                                       .Distinct())
+            {
+                <details style="margin: 10px 0; border-left: 2px solid #ffa500; padding-left: 10px;">
+                    <summary style="font-weight: bold; color: orange; cursor: pointer;">
+                        @loai
+                    </summary>
+                    @foreach (var kyThuat in Model.Where(m => m.TENLOAIKT == loai && m.NGAYKETQUA.Date == ngay))
+                    {
+                        <div class="details-container" style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #ddd;">
+                            <!-- Phần mô tả -->
+                            <div class="description" style="flex: 1;">
+                                <strong style="color: red;">@kyThuat.TENKYTHUAT</strong>
+                                <p><strong>BS Chỉ định:</strong> @kyThuat.BSCHIDINH</p>
+                                <div style="margin-top: 10px;">
+                                    <strong>Mô tả:</strong>
+                                    <div style="white-space: pre-line; margin-left: 10px; color: #444;">
+                                        @Html.Raw(kyThuat.MOTA)
+                                    </div>
+                                </div>
+                                <p><strong>Kết luận:</strong> @kyThuat.KETLUAN</p>
+                                <p><strong>BS Siêu Âm:</strong> @kyThuat.BSTHUCHIEN</p>
+                                <!-- Nút bấm để in kết quả -->
+                                <button class="btnExportPdf btn btn-primary"
+                                        data-url="@Url.Action("ExportPDF_CDHA", "Doctor", new {
+                                                Date = kyThuat.NGAYKETQUA,
+                                                code = kyThuat.MABN,
+                                                doctorCode = kyThuat.MABS
+                                            })">
+                                    In Kết Quả
+                                </button>
+                            </div>
+                            <!-- Phần hình ảnh -->
+                            <div class="image-gallery" style="flex: 1; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 5px;">
+                                @if (kyThuat.ImageBase64List != null && kyThuat.ImageBase64List.Any(image => !string.IsNullOrEmpty(image)))
+                                {
+                                    foreach (var image in kyThuat.ImageBase64List)
+                                    {
+                                        <img src="@image" alt="Image" style="cursor: pointer; max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 5px;" class="zoomable-image" />
+                                    }
+                                }
+                                else
+                                {
+                                    <p><em>Không có hình ảnh</em></p>
+                                }
+                            </div>
+                        </div>
+                    }
+                </details>
+            }
+        </details>
+    }
+</div>
+
+<script>
+    // JavaScript để xử lý modal và PDF
+    document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("imageModal");
+        const modalImage = document.getElementById("modalImage");
+        const closeModal = document.getElementById("closeModal");
+
+        // Khi click vào hình ảnh nhỏ
+        document.querySelectorAll(".zoomable-image").forEach(img => {
+            img.addEventListener("click", function () {
+                modal.style.display = "flex";
+                modalImage.src = this.src;
+            });
+        });
+
+        // Khi click vào nút đóng
+        closeModal.addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+
+        // Khi click ra ngoài modal
+        modal.addEventListener("click", function (e) {
+            if (e.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+
+        // Xử lý nút In Kết Quả
+        const buttons = document.querySelectorAll(".btnExportPdf");
+        buttons.forEach(button => {
+            button.addEventListener("click", function () {
+                const pdfUrl = this.getAttribute("data-url");
+                if (pdfUrl) {
+                    const iframe = document.getElementById("pdfViewer");
+                    if (iframe) {
+                        iframe.src = pdfUrl //+ "#toolbar=0"; // Đặt PDF vào iframe
+                    } else {
+                        alert("Iframe không tồn tại. Không thể hiển thị PDF.");
+                    }
+                } else {
+                    alert("Không có dữ liệu để in kết quả.");
+                }
+            });
+        });
+    });
+</script>
+
+<!-- Khung iframe hiển thị PDF -->
+<div class="row mt-3">
+    <div class="col-12">
+        <iframe id="pdfViewer" style="width: 100%; height: 600px; border: 1px solid #ddd;"></iframe>
+    </div>
+</div>

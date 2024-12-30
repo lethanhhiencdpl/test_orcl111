@@ -7,7 +7,7 @@ namespace test_orcl.Models
 {
     public class PatientImage
     {
-        public string MANN { get; set; }
+        public string ID { get; set; }
 
         public byte[] Imagee { get; set; }
 

@@ -16,7 +16,7 @@ namespace test_orcl
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "HomeAdmin", action = "Login", id = UrlParameter.Optional }
             );
         }
     }

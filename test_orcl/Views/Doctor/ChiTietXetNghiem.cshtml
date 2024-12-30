@@ -1,57 +1,246 @@
-﻿@model List<test_orcl.Models.Analysis>
+﻿
+@model test_orcl.ViewModels.ChiTietXetNghiemViewModels
 @{
     ViewBag.Title = "DetailPatient";
     Layout = "~/Views/Shared/_Layout_Admin.cshtml";
 }
 
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <div class="alert alert-warning text-center">@ViewBag.Message</div>
+}
+
+
+
 @Html.Action("_HienThiTTBenhNhanPartial", "Doctor")
 @Html.Action("_NgayXetNghiemPartial", "Doctor")
-<table class="table">
-    <thead>
-        <tr>
-            <th>Mã xét nghiệm</th>
-            <th>Tên xét nghiệm</th>
-            <th>Kết Quả</th>
-            <th>CSBT</th>
-            <th>Đơn vị</th>
-            <th>Ngày XN</th>
 
-        </tr>
-    </thead>
 
-    <tbody>
-        @foreach (var record in Model)
+
+
+
+
+@*@if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert alert-warning text-center" role="alert">
+            @Model.Message
+        </div>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Mã xét nghiệm</th>
+                    <th>Tên xét nghiệm</th>
+                    <th>Kết quả</th>
+                    <th>Giá trị tham chiếu</th>
+                    <th>Đơn vị</th>
+                    <th>Nhóm xét nghiệm</th>
+                    <th>Ngày xét nghiệm</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model == null || Model.Records == null || !Model.Records.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center alert alert-warning">Chưa có dữ liệu xét nghiệm</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model.Records.Select((record, index) => new { record, index }).ToList())
+                    {
+                        <tr>
+                            <td>@(item.index + 1)</td>
+                            <td>@item.record.TENXETNGHIEM</td>
+                            <td>
+                                @if (item.record.GHICHU.Trim().ToString() == "H")
+                                {
+                                    <span style="color: red; font-weight: 600">@item.record.KETQUA.ToString()</span>
+                                }
+                                else if (item.record.GHICHU.Trim().ToString() == "L")
+                                {
+                                    <span style="color: blue; font-weight: 600">@item.record.KETQUA.ToString()</span>
+                                }
+                                else if (item.record.GHICHU.Trim().ToString() == "")
+                                {
+                                    @item.record.KETQUA.ToString();
+                                }
+                                else
+                                {
+                                    @item.record.KETQUA.ToString();
+                                }
+                            </td>
+                            <td>@item.record.CSBT</td>
+                            <td>@item.record.DONVI</td>
+                            <td>@item.record.NHOMXETNGHIEM</td>
+                            <td>@item.record.MAYXETNGHIEM</td>
+                            <td>
+                                @(item.record.NGAYXETNGHIEM != null? item.record.NGAYXETNGHIEM.ToString("dd/MM/yyyy HH:mm"): "")
+                            </td>
+                        </tr>
+                    }
+                }
+
+
+            </tbody>
+        </table>
+    }
+
+
+    @if (Model != null && Model.Records != null && Model.Records.Any())
+    {
+        var firstRecord = Model.Records.FirstOrDefault();
+        <button id="btnExportPdf"
+                class="btn btn-primary"
+                onclick="window.location.href='@Url.Action("ExportPDF", "Doctor", new {
+            Date = firstRecord?.NGAYXETNGHIEM.ToString("yyyy-MM-dd"),
+            code = firstRecord?.MABN,
+            doctorCode = firstRecord?.MABS
+        })'">
+            In Kết Quả
+        </button>
+    }*@
+
+<body>
+    <div>
+        <h3 class="mt-4">Chi tiết kết quả xét nghiệm</h3>
+        @if (Model.Records == null || !Model.Records.Any())
         {
-            //var ranges = record.CSBT.Split('-');
-            //double result;
-            <tr>
-                <td>@record.MAXN</td>
-                <td>@record.TENXETNGHIEM</td>
-                <td>
-                    @if (record.GHICHU.Trim().ToString() == "H")
-                    {
-                        <span style="color: red; font-weight: 600">@record.KETQUA.ToString()</span>
-                    }
-                    else if (record.GHICHU.Trim().ToString() == "L")
-                    {
-                        <span style="color: blue; font-weight: 600">@record.KETQUA.ToString()</span>
-                    }
-                    else if (record.GHICHU.Trim().ToString() == "")
-                    {
-                        @record.KETQUA.ToString();
-                    }
-                    else 
-                    {
-                        @record.KETQUA.ToString();
-                    }
-                </td>
-
-                @*<td>@record.KETQUA.ToString()</td>*@
-                <td>@record.CSBT.ToString()</td>
-                <td>@record.DONVI</td>
-                <td>@record.NGAYXETNGHIEM</td>
-            </tr>
-
+            <div class="alert alert-warning text-center">Chưa có dữ liệu xét nghiệm</div>
         }
-    </tbody>
-</table>
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên xét nghiệm</th>
+                            <th>Kết quả</th>
+                            <th>Giá trị tham chiếu</th>
+                            <th>Đơn vị</th>
+                            <th>Nhóm xét nghiệm</th>
+                            <th>Máy xét nghiệm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Records.Select((record, index) => new { record, index }).ToList())
+                        {
+                            <tr>
+                                <td>@(item.index + 1)</td>
+                                <td>@item.record.TENXETNGHIEM</td>
+                                <td>
+                                    @if (item.record.GHICHU.Trim() == "H")
+                                    {
+                                        <span class="text-danger fw-bold">@item.record.KETQUA</span>
+                                    }
+                                    else if (item.record.GHICHU.Trim() == "L")
+                                    {
+                                        <span class="text-primary fw-bold">@item.record.KETQUA</span>
+                                    }
+                                    else
+                                    {
+                                        @item.record.KETQUA
+                                    }
+                                </td>
+                                <td>@item.record.CSBT</td>
+                                <td>@item.record.DONVI</td>
+                                <td>@item.record.NHOMXETNGHIEM</td>
+                                <td>@item.record.MAYXETNGHIEM</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        @if (Model.Records != null && Model.Records.Any())
+        {
+            var firstRecord = Model.Records.FirstOrDefault();
+            @*<button id="btnExportPdf"
+                    class="btn btn-primary mt-3"
+                    onclick="window.location.href='@Url.Action("ExportPDF", "Doctor", new {
+                    Date = firstRecord?.NGAYXETNGHIEM.ToString("yyyy-MM-dd"),
+                    code = firstRecord?.MABN,
+                    doctorCode = firstRecord?.MABS
+                })'">
+                In Kết Quả
+            </button>*@
+
+            @*<button id="btnExportPdf"
+                    class="btn btn-primary mt-3"
+                    onclick="viewPdfInIframe('@Url.Action("ExportPDF", "Doctor", new {
+             Date = firstRecord?.NGAYXETNGHIEM.ToString("yyyy-MM-dd"),
+             code = firstRecord?.MABN,
+             doctorCode = firstRecord?.MABS
+                })')">
+                In Kết Quả
+            </button>*@
+
+            @*<button id="btnExportPdf"
+                    class="btn btn-primary mt-3"
+                    onclick="openPdfInNewTab('@Url.Action("ExportPDF", "Doctor", new {
+                        Date = firstRecord?.NGAYXETNGHIEM.ToString("yyyy-MM-dd"),
+                        code = firstRecord?.MABN,
+                        doctorCode = firstRecord?.MABS
+                    })')">
+                In Kết Quả
+            </button>*@
+
+            <!-- Thông tin động để tạo URL PDF -->
+            <input type="hidden" id="code" value="@firstRecord.MABN" />
+            <input type="hidden" id="doctorCode" value="@firstRecord.MABS" />
+            <input type="hidden" id="date" value="@firstRecord.NGAYXETNGHIEM" />
+        }
+
+
+
+
+        <!-- Khung iframe hiển thị PDF -->
+        <div class="row">
+            <div class="col-12">
+                <iframe id="pdfViewer" style="width: 100%; height: 1300px; border: 1px solid #ddd;"></iframe>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+
+<script>
+    // Lấy dữ liệu từ các input ẩn
+    const code = document.getElementById("code")?.value; // Mã bệnh nhân
+    const doctorCode = document.getElementById("doctorCode")?.value; // Mã bác sĩ
+    const date = document.getElementById("date")?.value; // Ngày xét nghiệm
+
+    if (code && doctorCode && date) {
+        // Tạo URL động
+        const pdfUrl = `/Doctor/ExportPDF?Date=${date}&code=${code}&doctorCode=${doctorCode}`;//#toolbar=0
+
+        // Đặt URL vào iframe
+        document.getElementById("pdfViewer").src = pdfUrl;
+    } else {
+        console.error("Không đủ thông tin để hiển thị PDF.");
+    }
+</script>
+
+@*<script>
+    function viewPdfInIframe(pdfUrl) {
+        // Gán URL PDF vào iframe
+        document.getElementById("pdfViewer").src = pdfUrl;
+    }
+</script>*@
+<script>
+    // Hàm mở PDF trong tab mới
+    function openPdfInNewTab(pdfUrl) {
+        if (pdfUrl) {
+            window.open(pdfUrl, '_blank'); // Mở PDF trên tab mới
+        } else {
+            console.error("URL không hợp lệ.");
+        }
+    }
+</script>

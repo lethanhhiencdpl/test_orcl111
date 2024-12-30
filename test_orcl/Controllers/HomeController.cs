@@ -57,39 +57,39 @@ namespace test_orcl.Controllers
 
 
         // Gói khám
-        public PartialViewResult GoiKhamPartial()
-        {
-            List<GoiKham> tks = new List<GoiKham>();
-            string connectionString = ConfigurationManager.ConnectionStrings["OracleDbContext"].ConnectionString;
+        //public PartialViewResult GoiKhamPartial()
+        //{
+        //    List<GoiKham> tks = new List<GoiKham>();
+        //    string connectionString = ConfigurationManager.ConnectionStrings["OracleDbContext"].ConnectionString;
 
-            using (OracleConnection connection = new OracleConnection(connectionString))
-            {
-                string query = "SELECT * FROM mqsoftdaiphuoc.GoiKham";
+        //    using (OracleConnection connection = new OracleConnection(connectionString))
+        //    {
+        //        string query = "SELECT * FROM mqsoftdaiphuoc.GoiKham";
 
-                using (OracleCommand command = new OracleCommand(query, connection))
-                {
-                    connection.Open();
+        //        using (OracleCommand command = new OracleCommand(query, connection))
+        //        {
+        //            connection.Open();
 
-                    using (OracleDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            GoiKham tk = new GoiKham
-                            {
-                                ID = Convert.ToInt32(reader["ID"]),
-                                TENGOIKHAM = reader["TENGOIKHAM"].ToString(),
-                                MOTA = reader["MOTA"].ToString(),
-                                NGAYUD = Convert.ToDateTime(reader["NGAYUD"])
-                            };
-                            tks.Add(tk);
-                        }
-                    }
+        //            using (OracleDataReader reader = command.ExecuteReader())
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    GoiKham tk = new GoiKham
+        //                    {
+        //                        ID = Convert.ToInt32(reader["ID"]),
+        //                        TENGOIKHAM = reader["TENGOIKHAM"].ToString(),
+        //                        MOTA = reader["MOTA"].ToString(),
+        //                        NGAYUD = Convert.ToDateTime(reader["NGAYUD"])
+        //                    };
+        //                    tks.Add(tk);
+        //                }
+        //            }
 
-                }
-            }
-            ViewBag.Count = tks.Count();
-            return PartialView("GoiKhamPartial",tks);
-        }
+        //        }
+        //    }
+        //    ViewBag.Count = tks.Count();
+        //    return PartialView("GoiKhamPartial",tks);
+        //}
         public PartialViewResult _LoiThoaiDatHenPartial()
         {
             return PartialView("_LoiThoaiDatHenPartial");
