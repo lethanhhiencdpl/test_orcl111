@@ -15,96 +15,6 @@
 @Html.Action("_HienThiTTBenhNhanPartial", "Doctor")
 @Html.Action("_NgayXetNghiemPartial", "Doctor")
 
-
-
-
-
-
-@*@if (!string.IsNullOrEmpty(Model.Message))
-    {
-        <div class="alert alert-warning text-center" role="alert">
-            @Model.Message
-        </div>
-    }
-    else
-    {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>STT</th>
-                    <th>Mã xét nghiệm</th>
-                    <th>Tên xét nghiệm</th>
-                    <th>Kết quả</th>
-                    <th>Giá trị tham chiếu</th>
-                    <th>Đơn vị</th>
-                    <th>Nhóm xét nghiệm</th>
-                    <th>Ngày xét nghiệm</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                @if (Model == null || Model.Records == null || !Model.Records.Any())
-                {
-                    <tr>
-                        <td colspan="6" class="text-center alert alert-warning">Chưa có dữ liệu xét nghiệm</td>
-                    </tr>
-                }
-                else
-                {
-                    foreach (var item in Model.Records.Select((record, index) => new { record, index }).ToList())
-                    {
-                        <tr>
-                            <td>@(item.index + 1)</td>
-                            <td>@item.record.TENXETNGHIEM</td>
-                            <td>
-                                @if (item.record.GHICHU.Trim().ToString() == "H")
-                                {
-                                    <span style="color: red; font-weight: 600">@item.record.KETQUA.ToString()</span>
-                                }
-                                else if (item.record.GHICHU.Trim().ToString() == "L")
-                                {
-                                    <span style="color: blue; font-weight: 600">@item.record.KETQUA.ToString()</span>
-                                }
-                                else if (item.record.GHICHU.Trim().ToString() == "")
-                                {
-                                    @item.record.KETQUA.ToString();
-                                }
-                                else
-                                {
-                                    @item.record.KETQUA.ToString();
-                                }
-                            </td>
-                            <td>@item.record.CSBT</td>
-                            <td>@item.record.DONVI</td>
-                            <td>@item.record.NHOMXETNGHIEM</td>
-                            <td>@item.record.MAYXETNGHIEM</td>
-                            <td>
-                                @(item.record.NGAYXETNGHIEM != null? item.record.NGAYXETNGHIEM.ToString("dd/MM/yyyy HH:mm"): "")
-                            </td>
-                        </tr>
-                    }
-                }
-
-
-            </tbody>
-        </table>
-    }
-
-
-    @if (Model != null && Model.Records != null && Model.Records.Any())
-    {
-        var firstRecord = Model.Records.FirstOrDefault();
-        <button id="btnExportPdf"
-                class="btn btn-primary"
-                onclick="window.location.href='@Url.Action("ExportPDF", "Doctor", new {
-            Date = firstRecord?.NGAYXETNGHIEM.ToString("yyyy-MM-dd"),
-            code = firstRecord?.MABN,
-            doctorCode = firstRecord?.MABS
-        })'">
-            In Kết Quả
-        </button>
-    }*@
-
 <body>
     <div>
         <h3 class="mt-4">Chi tiết kết quả xét nghiệm</h3>
@@ -203,7 +113,7 @@
         <!-- Khung iframe hiển thị PDF -->
         <div class="row">
             <div class="col-12">
-                <iframe id="pdfViewer" style="width: 100%; height: 1300px; border: 1px solid #ddd;"></iframe>
+                <iframe id="pdfViewer" style="width: 100%; height: 1000px; border: 1px solid #ddd;"></iframe>
             </div>
         </div>
     </div>

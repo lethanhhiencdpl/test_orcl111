@@ -336,7 +336,7 @@ namespace test_orcl.Controllers
                 //byte[] fileBytes = ms.ToArray();
                 //return File(fileBytes, "application/pdf");
                 // Trả về PDF
-                Response.Headers.Add("Content-Disposition", "inline; filename=output.pdf");
+                Response.Headers.Add("Content-Disposition", "inline; filename="+firstRecord.MABN+"_XN.pdf");
                 byte[] fileBytes = ms.ToArray();
                 return File(fileBytes, "application/pdf");
             }
@@ -1353,7 +1353,7 @@ namespace test_orcl.Controllers
                     doc.Close();
                 }
                 // Trả về file PDF
-                Response.Headers.Add("Content-Disposition", "inline; filename=output.pdf");
+                Response.Headers.Add("Content-Disposition", "inline; filename="+firRecord.MABN+"_CDHA.pdf");
                 byte[] fileBytes = ms.ToArray();
                 return File(fileBytes, "application/pdf");
             }

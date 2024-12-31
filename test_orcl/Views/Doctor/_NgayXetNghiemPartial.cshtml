@@ -11,7 +11,7 @@
         <ul>
             @foreach (var item in Model)
             {
-                <li>@Html.ActionLink(item.NGAYXETNGHIEM.ToString("dd/MM/yyyy"), "ChiTietXetNghiem", "Doctor", new { Date = item.NGAYXETNGHIEM, DoctorCode = item.MABS, code = item.MABN }, null)</li>
+                <li style="color:orangered; font:bold">@Html.ActionLink(item.NGAYXETNGHIEM.ToString("dd/MM/yyyy"), "ChiTietXetNghiem", "Doctor", new { Date = item.NGAYXETNGHIEM, DoctorCode = item.MABS, code = item.MABN }, null)</li>
             }
         </ul>
     </div>
