@@ -56,6 +56,43 @@
         });
     </script>
 
+    @*<div class="table-responsive mt-4">
+            <table id="patientTable" class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Mã BN</th>
+                        <th>Họ tên</th>
+                        <th>Năm sinh</th>
+                        <th>Ngày</th>
+                        <th>KQ Xét Nghiệm</th>
+                        <th>KQ CĐHA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var record in Model)
+                        {
+                            <tr>
+                                <td>@record.MABN</td>
+                                <td>@record.HOTEN</td>
+                                <td>@record.NAMSINH</td>
+                                <td>@record.NGAY.ToString("dd/MM/yyyy")</td>
+                                <td>@Html.ActionLink("Xem", "ChiTietXetNghiem", "Doctor", new { code = record.MABN, Date = record.NGAY, doctorCode = record.MABS }, new { target = "_blank" })</td>
+                                <td>@Html.ActionLink("Xem", "ChiTietCHDA", "Doctor", new { code = record.MABN, Date = record.NGAY, doctorCode = record.MABS }, new { target = "_blank" })</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center">Không có dữ liệu hiển thị</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>*@
+
     <div class="table-responsive mt-4">
         <table id="patientTable" class="table table-bordered table-striped">
             <thead class="table-dark">
@@ -63,7 +100,6 @@
                     <th>Mã BN</th>
                     <th>Họ tên</th>
                     <th>Năm sinh</th>
-                    <th>Mã BS</th>
                     <th>Ngày</th>
                     <th>KQ Xét Nghiệm</th>
                     <th>KQ CĐHA</th>
@@ -78,7 +114,6 @@
                             <td>@record.MABN</td>
                             <td>@record.HOTEN</td>
                             <td>@record.NAMSINH</td>
-                            <td>@record.MABS.ToString()</td>
                             <td>@record.NGAY.ToString("dd/MM/yyyy")</td>
                             <td>@Html.ActionLink("Xem", "ChiTietXetNghiem", "Doctor", new { code = record.MABN, Date = record.NGAY, doctorCode = record.MABS }, new { target = "_blank" })</td>
                             <td>@Html.ActionLink("Xem", "ChiTietCHDA", "Doctor", new { code = record.MABN, Date = record.NGAY, doctorCode = record.MABS }, new { target = "_blank" })</td>
@@ -94,6 +129,8 @@
             </tbody>
         </table>
     </div>
+
+
     @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
     {
         <div class="alert alert-danger">
@@ -120,5 +157,38 @@
 
     .form-label {
         font-weight: bold; /* Làm nổi bật nhãn */
+    }
+</style>
+
+<style>
+    .table-responsive {
+        overflow-x: auto;
+        position: relative;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2; /* Đảm bảo cột header luôn trên các nội dung khác */
+        background-color: #0094ff;  /*Màu nền cho header */
+        /*color: #fff;*/
+    }
+
+        tbody td:first-child, /* Cố định cột Họ tên */
+        thead th:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 3; /* Đảm bảo cột Họ tên không bị che */
+            background-color: #f8f9fa; /* Màu nền cho cột cố định */
+            font-weight: bold;
+        }
+
+    tbody td:first-child {
+        background-color: #fff; /* Màu nền của các ô dữ liệu */
     }
 </style>

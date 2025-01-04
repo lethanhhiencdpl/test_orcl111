@@ -4,114 +4,6 @@
     Layout = "~/Views/Shared/_Layout_Admin.cshtml";
 }
 @Html.Action("_HienThiTTBenhNhanPartial", "Doctor")
-@*@Html.Action("_NgayCDHAPartial", "Doctor")*@
-
-
-@*
-    <div>
-        <!-- Modal để hiển thị hình ảnh lớn -->
-        <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center;">
-            <span id="closeModal" style="position: absolute; top: 30px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-            <img id="modalImage" src="" alt="Zoomed Image" style="max-width: 90%; max-height: 90%; border: 5px solid white; border-radius: 10px;" />
-        </div>
-
-        @foreach (var ngay in Model.Select(m => m.NGAYKETQUA.Date).Distinct().OrderBy(n => n))
-        {
-            <details style="margin-bottom: 20px;">
-                <summary style="font-size: 16px; font-weight: bold; color: brown; cursor: pointer;">
-                    Ngày: @ngay.ToString("dd/MM/yyyy")
-                </summary>
-                @foreach (var loai in Model.Where(m => m.NGAYKETQUA.Date == ngay)
-                                                       .Select(m => m.TENLOAIKT)
-                                                        .Distinct())
-                            {
-                    <details style="margin: 10px 0; border-left: 2px solid #ffa500; padding-left: 10px;">
-                        <summary style="font-weight: bold; color: orange; cursor: pointer;">
-                            @loai
-                        </summary>
-                        @foreach (var sieuAm in Model.Where(m => m.TENLOAIKT == loai && m.NGAYKETQUA.Date == ngay))
-                                    {
-                            <div style="margin-top: 20px; border-bottom: 1px solid #ddd; padding-bottom: 20px; display: flex; gap: 20px;">
-                                <!-- Phần mô tả -->
-                                <div style="flex: 1;">
-                                    <strong style="color: red;">@sieuAm.TENKYTHUAT</strong>
-                                    <div style="margin-top: 10px;">
-                                        <strong>Mô tả:</strong>
-                                        <div style="white-space: pre-line; margin-left: 10px; color: #444;">
-                                            @Html.Raw(sieuAm.MOTA)
-                                        </div>
-                                    </div>
-                                    <p><strong>Kết luận:</strong> @sieuAm.KETLUAN</p>
-                                    <p><strong>BS Siêu Âm:</strong> @sieuAm.HOTENBS</p>
-                                    @if (Model != null && Model.Any())
-                                    {
-                                        var firstRecord = Model.FirstOrDefault();
-                                        <button id="btnExportPdf"
-                                                class="btn btn-primary"
-                                                 onclick="window.location.href='@Url.Action("ExportPDF_SieuAm", "Doctor", new {
-                                                 Date = firstRecord.NGAYKETQUA.ToString("yyyy-MM-dd"),
-                                                 code = firstRecord?.MABN,
-                                                 doctorCode = firstRecord?.MABS
-                                                    })'">
-                                            In Kết Quả
-                                        </button>
-                }
-                                </div>
-
-
-                                <!-- Phần hình ảnh -->
-                                <div style="flex: 1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                                    @if (sieuAm.ImageBase64List.Any())
-                                    {
-                                        foreach (var image in sieuAm.ImageBase64List)
-                                        {
-                                            <img src="@image" alt="Image" style="cursor: pointer; max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 5px;" class="zoomable-image" />
-                                        }
-                                    }
-                                    else
-                {
-                                        <p><em>Không có hình ảnh</em></p>
-                                    }
-                                </div>
-                            </div>
-                        }
-                    </details>
-                }
-            </details>
-        }
-    </div>
-
-    <script>
-        // JavaScript để xử lý modal
-        document.addEventListener("DOMContentLoaded", function () {
-            const modal = document.getElementById("imageModal");
-            const modalImage = document.getElementById("modalImage");
-            const closeModal = document.getElementById("closeModal");
-
-            // Khi click vào hình ảnh nhỏ
-            document.querySelectorAll(".zoomable-image").forEach(img => {
-                img.addEventListener("click", function () {
-                    modal.style.display = "flex";
-                    modalImage.src = this.src;
-                });
-            });
-
-            // Khi click vào nút đóng
-            closeModal.addEventListener("click", function () {
-                modal.style.display = "none";
-            });
-
-            // Khi click ra ngoài modal
-            modal.addEventListener("click", function (e) {
-                if (e.target === modal) {
-                    modal.style.display = "none";
-                }
-            });
-        });
-    </script>
-
-*@
-
 
 
 @*
@@ -260,7 +152,6 @@
 
 
 
-
 <div>
     <!-- Modal để hiển thị hình ảnh lớn -->
     <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center;">
@@ -297,31 +188,44 @@
                                         @Html.Raw(kyThuat.MOTA)
                                     </div>
                                 </div>
-                                <p><strong>Kết luận:</strong> @kyThuat.KETLUAN</p>
-                                <p><strong>BS Siêu Âm:</strong> @kyThuat.BSTHUCHIEN</p>
+                                <p><strong>Kết luận: @kyThuat.KETLUAN.ToUpper()</strong></p>
+                                <p><strong>BS thực hiện:</strong> @kyThuat.BSTHUCHIEN</p>
                                 <!-- Nút bấm để in kết quả -->
-                                <button class="btnExportPdf btn btn-primary"
-                                        data-url="@Url.Action("ExportPDF_CDHA", "Doctor", new {
-                                                Date = kyThuat.NGAYKETQUA,
-                                                code = kyThuat.MABN,
-                                                doctorCode = kyThuat.MABS
+                                @*<button class="btnExportPdf btn btn-primary"
+                                            data-url="@Url.Action("ExportPDF_CDHA", "Doctor", new {
+                                            Date = kyThuat.NGAYKETQUA,
+                                            code = kyThuat.MABN,
+                                            doctorCode = kyThuat.MABS
                                             })">
-                                    In Kết Quả
-                                </button>
+                                        In Kết Quả
+                                    </button>*@
+                                <div>
+                                    <!-- Nút bấm để tải PDF trong vòng lặp -->
+                                    <button class="downloadPdf btn btn-success"
+                                            data-url="@Url.Action("ExportPDF_CDHA", "Doctor", new {
+                                            Date = kyThuat.NGAYKETQUA.ToString("yyyy-MM-dd"),
+                                            code = kyThuat.MABN,
+                                            doctorCode = kyThuat.MABS })">
+                                        <i class="fa fa-file-pdf-o"></i> Tải PDF
+                                    </button>
+
+
+                                </div>
+
                             </div>
                             <!-- Phần hình ảnh -->
                             <div class="image-gallery" style="flex: 1; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 5px;">
-                                @if (kyThuat.ImageBase64List != null && kyThuat.ImageBase64List.Any(image => !string.IsNullOrEmpty(image)))
-                                {
-                                    foreach (var image in kyThuat.ImageBase64List)
+                                    @if (kyThuat.ImageBase64List != null && kyThuat.ImageBase64List.Any(image => !string.IsNullOrEmpty(image)))
                                     {
-                                        <img src="@image" alt="Image" style="cursor: pointer; max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 5px;" class="zoomable-image" />
+                                        foreach (var image in kyThuat.ImageBase64List)
+                                        {
+                                            <img src="@image" alt="Image" style="cursor: pointer; max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 5px;" class="zoomable-image" />
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                    <p><em>Đã trả hình ảnh qua Film</em></p>
-                                }
+                                    else
+                                    {
+                                        <p><em>Đã trả hình ảnh qua Film</em></p>
+                                    }
                             </div>
                         </div>
                     }
@@ -332,7 +236,7 @@
 </div>
 
 <script>
-    // JavaScript để xử lý modal và PDF
+
     document.addEventListener("DOMContentLoaded", function () {
         const modal = document.getElementById("imageModal");
         const modalImage = document.getElementById("modalImage");
@@ -357,30 +261,145 @@
                 modal.style.display = "none";
             }
         });
+        // Tai PDF tab moi
+        const downloadButtons = document.querySelectorAll(".downloadPdf");
 
-        // Xử lý nút In Kết Quả
-        const buttons = document.querySelectorAll(".btnExportPdf");
-        buttons.forEach(button => {
+        // Lặp qua từng button và gắn sự kiện click
+        downloadButtons.forEach(button => {
             button.addEventListener("click", function () {
                 const pdfUrl = this.getAttribute("data-url");
                 if (pdfUrl) {
-                    const iframe = document.getElementById("pdfViewer");
-                    if (iframe) {
-                        iframe.src = pdfUrl //+ "#toolbar=0"; // Đặt PDF vào iframe
-                    } else {
-                        alert("Iframe không tồn tại. Không thể hiển thị PDF.");
-                    }
+                    window.open(pdfUrl, "_blank"); // Mở file PDF trên tab mới
                 } else {
-                    alert("Không có dữ liệu để in kết quả.");
+                    alert("Không có dữ liệu để tải PDF.");
                 }
             });
         });
     });
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js"></script>
+<link href="https://mozilla.github.io/pdf.js/web/viewer.css" rel="stylesheet">
+<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+<script src="https://mozilla.github.io/pdf.js/web/viewer.js"></script>
+
+@*Xu lys anh bang mui ten*@
+@*<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const modal = document.getElementById("imageModal");
+            const modalImage = document.getElementById("modalImage");
+            const closeModal = document.getElementById("closeModal");
+
+            // Tất cả các hình ảnh có thể phóng to
+            const images = Array.from(document.querySelectorAll(".zoomable-image"));
+            let currentIndex = 0;
+
+            // Hiển thị hình ảnh lớn trong modal
+            function showImage(index) {
+                if (index >= 0 && index < images.length) {
+                    currentIndex = index;
+                    modalImage.src = images[currentIndex].src;
+                    modal.style.display = "flex";
+                }
+            }
+
+            // Xử lý khi click vào một hình ảnh
+            images.forEach((img, index) => {
+                img.addEventListener("click", function () {
+                    showImage(index);
+                });
+            });
+
+            // Đóng modal khi bấm nút "X"
+            closeModal.addEventListener("click", function () {
+                modal.style.display = "none";
+            });
+
+            // Đóng modal khi click ra ngoài modal
+            modal.addEventListener("click", function (e) {
+                if (e.target === modal) {
+                    modal.style.display = "none";
+                }
+            });
+
+            // Xử lý phím mũi tên trái/phải
+            document.addEventListener("keydown", function (event) {
+                if (modal.style.display === "flex") {
+                    if (event.key === "ArrowRight") {
+                        // Phím mũi tên phải
+                        showImage((currentIndex + 1) % images.length);
+                    } else if (event.key === "ArrowLeft") {
+                        // Phím mũi tên trái
+                        showImage((currentIndex - 1 + images.length) % images.length);
+                    }
+                }
+            });
+        });
+    </script>*@
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("imageModal");
+        const modalImage = document.getElementById("modalImage");
+        const closeModal = document.getElementById("closeModal");
+
+        // Tạo danh sách các nhóm hình ảnh theo loại kỹ thuật
+        const imageGroups = {};
+        document.querySelectorAll("[data-ky-thuat]").forEach(container => {
+            const key = container.getAttribute("data-ky-thuat");
+            const images = Array.from(container.querySelectorAll(".zoomable-image"));
+            imageGroups[key] = images;
+        });
+
+        let currentImages = []; // Lưu danh sách hình ảnh hiện tại
+        let currentIndex = 0;  // Lưu chỉ số hình ảnh hiện tại
+
+        // Hiển thị hình ảnh lớn trong modal
+        function showImage(index) {
+            if (index >= 0 && index < currentImages.length) {
+                currentIndex = index;
+                modalImage.src = currentImages[currentIndex].src;
+                modal.style.display = "flex";
+            }
+        }
+
+        // Xử lý khi click vào một hình ảnh
+        document.querySelectorAll(".zoomable-image").forEach(img => {
+            img.addEventListener("click", function () {
+                const key = this.closest("[data-ky-thuat]").getAttribute("data-ky-thuat");
+                currentImages = imageGroups[key];
+                const index = currentImages.indexOf(this);
+                showImage(index);
+            });
+        });
+
+        // Đóng modal khi bấm nút "X"
+        closeModal.addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+
+        // Đóng modal khi click ra ngoài modal
+        modal.addEventListener("click", function (e) {
+            if (e.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+
+        // Xử lý phím mũi tên trái/phải
+        document.addEventListener("keydown", function (event) {
+            if (modal.style.display === "flex") {
+                if (event.key === "ArrowRight") {
+                    // Phím mũi tên phải
+                    showImage((currentIndex + 1) % currentImages.length);
+                } else if (event.key === "ArrowLeft") {
+                    // Phím mũi tên trái
+                    showImage((currentIndex - 1 + currentImages.length) % currentImages.length);
+                }
+            }
+        });
+    });
 </script>
 
-<!-- Khung iframe hiển thị PDF -->
-<div class="row mt-3">
-    <div class="col-12">
-        <iframe id="pdfViewer" style="width: 90%; height: 1000px; border: 1px solid #ddd;"></iframe>
-    </div>
-</div>
+

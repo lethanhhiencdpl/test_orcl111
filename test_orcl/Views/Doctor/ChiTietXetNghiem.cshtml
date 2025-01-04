@@ -71,86 +71,37 @@
         @if (Model.Records != null && Model.Records.Any())
         {
             var firstRecord = Model.Records.FirstOrDefault();
-            @*<button id="btnExportPdf"
-                    class="btn btn-primary mt-3"
-                    onclick="window.location.href='@Url.Action("ExportPDF", "Doctor", new {
-                    Date = firstRecord?.NGAYXETNGHIEM.ToString("yyyy-MM-dd"),
-                    code = firstRecord?.MABN,
-                    doctorCode = firstRecord?.MABS
-                })'">
-                In Kết Quả
-            </button>*@
-
-            @*<button id="btnExportPdf"
-                    class="btn btn-primary mt-3"
-                    onclick="viewPdfInIframe('@Url.Action("ExportPDF", "Doctor", new {
-             Date = firstRecord?.NGAYXETNGHIEM.ToString("yyyy-MM-dd"),
-             code = firstRecord?.MABN,
-             doctorCode = firstRecord?.MABS
-                })')">
-                In Kết Quả
-            </button>*@
-
-            @*<button id="btnExportPdf"
-                    class="btn btn-primary mt-3"
-                    onclick="openPdfInNewTab('@Url.Action("ExportPDF", "Doctor", new {
-                        Date = firstRecord?.NGAYXETNGHIEM.ToString("yyyy-MM-dd"),
-                        code = firstRecord?.MABN,
-                        doctorCode = firstRecord?.MABS
-                    })')">
-                In Kết Quả
-            </button>*@
-
-            <!-- Thông tin động để tạo URL PDF -->
-            <input type="hidden" id="code" value="@firstRecord.MABN" />
-            <input type="hidden" id="doctorCode" value="@firstRecord.MABS" />
-            <input type="hidden" id="date" value="@firstRecord.NGAYXETNGHIEM" />
+            <div>
+                <!-- Nút bấm để tải PDF trong vòng lặp -->
+                <button class="downloadPdf btn btn-success"
+                        data-url="@Url.Action("ExportPDF", "Doctor", new {
+                Date = firstRecord?.NGAYXETNGHIEM.ToString("yyyy-MM-dd"),
+                code = firstRecord?.MABN,
+                doctorCode = firstRecord?.MABS })">
+                    <i class="fa fa-file-pdf-o"></i> Tải PDF
+                </button>
+            </div>
         }
 
-
-
-
-        <!-- Khung iframe hiển thị PDF -->
-        <div class="row">
-            <div class="col-12">
-                <iframe id="pdfViewer" style="width: 100%; height: 1000px; border: 1px solid #ddd;"></iframe>
-            </div>
-        </div>
     </div>
 
 </body>
 
-
 <script>
-    // Lấy dữ liệu từ các input ẩn
-    const code = document.getElementById("code")?.value; // Mã bệnh nhân
-    const doctorCode = document.getElementById("doctorCode")?.value; // Mã bác sĩ
-    const date = document.getElementById("date")?.value; // Ngày xét nghiệm
+    document.addEventListener("DOMContentLoaded", function () {
+        // Lấy tất cả các button có class downloadPdf
+        const downloadButtons = document.querySelectorAll(".downloadPdf");
 
-    if (code && doctorCode && date) {
-        // Tạo URL động
-        const pdfUrl = `/Doctor/ExportPDF?Date=${date}&code=${code}&doctorCode=${doctorCode}`;//#toolbar=0
-
-        // Đặt URL vào iframe
-        document.getElementById("pdfViewer").src = pdfUrl;
-    } else {
-        console.error("Không đủ thông tin để hiển thị PDF.");
-    }
-</script>
-
-@*<script>
-    function viewPdfInIframe(pdfUrl) {
-        // Gán URL PDF vào iframe
-        document.getElementById("pdfViewer").src = pdfUrl;
-    }
-</script>*@
-<script>
-    // Hàm mở PDF trong tab mới
-    function openPdfInNewTab(pdfUrl) {
-        if (pdfUrl) {
-            window.open(pdfUrl, '_blank'); // Mở PDF trên tab mới
-        } else {
-            console.error("URL không hợp lệ.");
-        }
-    }
+        // Lặp qua từng button và gắn sự kiện click
+        downloadButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                const pdfUrl = this.getAttribute("data-url");
+                if (pdfUrl) {
+                    window.open(pdfUrl, "_blank"); // Mở file PDF trên tab mới
+                } else {
+                    alert("Không có dữ liệu để tải PDF.");
+                }
+            });
+        });
+    });
 </script>

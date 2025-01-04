@@ -1353,6 +1353,8 @@ namespace test_orcl.Controllers
                     doc.Close();
                 }
                 // Trả về file PDF
+                Response.Buffer = true;
+                Response.BufferOutput = true;
                 Response.Headers.Add("Content-Disposition", "inline; filename="+firRecord.MABN+"_CDHA.pdf");
                 byte[] fileBytes = ms.ToArray();
                 return File(fileBytes, "application/pdf");
